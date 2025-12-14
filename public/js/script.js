@@ -4,8 +4,8 @@ const socket = io(); // A connection request goes to backend
 // Check if geolocation is supported
 if (navigator.geolocation) {
     navigator.geolocation.watchPosition(
-        (postion) => {
-            const { latitude, longitude } = postion.coords;
+        (position) => {
+            const { latitude, longitude } = position.coords;
 
             // console.log("Location:", latitude, longitude);
 
@@ -17,7 +17,7 @@ if (navigator.geolocation) {
         },
         {
            enableHighAccuracy: true,
-           timeout:5000, // check location again after 5 sec
+           timeout:3000, // check location again after 3 sec
            maximumAge: 0 // No cached data 
         }
     )
@@ -39,14 +39,17 @@ const markers = {};
 socket.on("receive-location", (data)=>{
     const { id, latitude, longitude } = data;
 
-    // Center map on first location received
-    map.setView([latitude, longitude]);
 
     if(markers[id]){
+        // Update existing marker position
         markers[id].setLatLng([latitude, longitude]);
     }
     else{
+        // Create new marker
         markers[id] = L.marker([latitude, longitude]).addTo(map);
+
+        // Only center map for NEW users
+        map.setView([latitude, longitude]);
     }
 });
 

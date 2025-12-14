@@ -14,3 +14,13 @@ body{
     width: 100%;
     height: 100%;
 }
+
+/* Remove shadow */
+.leaflet-marker-shadow {
+    display: none !important;
+}
+
+/* Smooth marker movement */
+.leaflet-marker-pane img {
+    transition: transform 1s linear;
+}
